@@ -21,3 +21,9 @@
 
 ![image](https://github.com/Bangkit-Capstone-Project-C23-PS101/Nutrimate-CC/assets/134526331/3d3558a3-b81f-496e-9ab2-d4150d1d6049)
 <p>Firestore : We're using Firestore as our Database</p>
+
+<h2> API Documentation</h2>
+<br>
+<a href="https://nutrimate-api-backend-vuemj77h6q-et.a.run.app/signup">"/signup" Endpoint</a>
+<a href="https://nutrimate-api-backend-vuemj77h6q-et.a.run.app/login">"/login" Endpoint</a>
+<a href="https://nutrimate-api-backend-vuemj77h6q-et.a.run.app/snapshots">"/snapshots" Endpoint</a>
