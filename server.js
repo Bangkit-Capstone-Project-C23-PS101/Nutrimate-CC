@@ -25,62 +25,6 @@ app.get('/', (req, res) => {
   }
 })
 
-/* -------------- Auth Endpoint -------------- */
-
-// Sign up endpoint
-app.post('/signup', (req, res) => {
-    const { email, password } = req.body;
-
-    admin.auth().createUser({
-        email: email,
-        password: password,
-    })
-    .then((userRecord) => {
-        console.log('Successfully created new user:', userRecord.uid);
-        res.status(200).send('User registered successfully');
-        })
-    .catch((error) => {
-    console.error('Error creating new user:', error);
-    res.status(400).send('User registration failed');
-    });
-});
-
-// Login endpoint
-app.post('/login', (req, res) => {
-    const { email, password } = req.body;
-
-    admin.auth().getUserByEmail(email)
-    .then((userRecord) => {
-    admin.auth().createCustomToken(userRecord.uid)
-        .then((customToken) => {
-            res.status(200).json({ token: customToken });
-        })
-        .catch((error) => {
-            console.error('Error creating custom token:', error);
-            res.status(500).send('Login failed');
-        });
-    })
-    .catch((error) => {
-        console.error('Error fetching user data:', error);
-        res.status(404).send('User not found');
-    });
-});
-
-// Logout endpoint
-app.post('/logout', (req, res) => {
-    const idToken = req.headers.authorization;
-
-    admin.auth().verifyIdToken(idToken)
-    .then(() => {
-      // Clear the user session or perform any other logout logic
-        res.status(200).send('Logout successful');
-    })
-    .catch((error) => {
-        console.error('Error verifying ID token:', error);
-        res.status(401).send('Logout failed');
-    });
-});
-
 /* -------------- Snapshot Endpoint -------------- */
 
 // Create MySQL database connection pool
@@ -92,14 +36,13 @@ const pool = mysql.createPool({
 }); 
 
 // Middleware for verifying Firebase ID token
-const verifyToken = async (req, res, next) => {
+const verifyToken = async (req, res) => {
   // console.log(req.headers.authorization)
   try {
     const idToken = req.headers.authorization;
     const decodedToken = await admin.auth().verifyIdToken(idToken);
     req.user = decodedToken;
     console.log(`Verified users : ${req.user}`)
-    next();
   } catch (error) {
     console.error('Error verifying ID token:', error);
     res.status(401).send('Unauthorized');
